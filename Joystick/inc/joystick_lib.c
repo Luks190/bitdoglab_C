@@ -37,7 +37,7 @@ int value_of_the_pos_of_joystick_y(){
 }
 
 // Função que detecta se houve movimento no joystick no eixo Y
-int read_moviment_of_joystick_y(){
+int read_movement_of_joystick_y(){
     uint16_t vry_value; // Variável para armazenar a leitura do ADC
 
     adc_select_input(0); // Seleciona o canal 0 do ADC (eixo Y do joystick)
@@ -75,7 +75,7 @@ int value_of_the_pos_of_joystick_x(){
 }
 
 // Função que detecta se houve movimento no joystick no eixo X
-int read_moviment_of_joystick_x(){
+int read_movement_of_joystick_x(){
     uint16_t vrx_value; // Variável para armazenar a leitura do ADC
 
     adc_select_input(1); // Seleciona o canal 1 do ADC (eixo X do joystick)

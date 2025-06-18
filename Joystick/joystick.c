@@ -10,8 +10,8 @@ int main() {
         // Lê valores do joystick
         int x_pos = value_of_the_pos_of_joystick_x();
         int y_pos = value_of_the_pos_of_joystick_y();
-        int x_mov = read_moviment_of_joystick_x();
-        int y_mov = read_moviment_of_joystick_y();
+        int x_mov = read_movement_of_joystick_x();
+        int y_mov = read_movement_of_joystick_y();
         
         // Exibe os resultados formatados
         printf("\n--- Estado do Joystick ---\n");
