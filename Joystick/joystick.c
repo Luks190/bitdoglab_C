@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "inc/joystick_lib.h"
+#include "inc_joystick/joystick_lib.h"
 
 int main() {
     stdio_init_all(); 
