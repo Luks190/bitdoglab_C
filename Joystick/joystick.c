@@ -22,7 +22,18 @@ int main() {
         printf("Eixo Y: %s | Movimento: %s\n", 
                (y_pos == 1) ? "Cima" : (y_pos == -1) ? "Baixo" : "Neutro",
                y_mov ? "Detectado" : "Ausente");
+
+        printf("-------------------------\n");
+        printf("porcentagem do eixo X: %.2f%%\n", read_percentage_of_move_x());
+        printf("porcentagem do eixo Y: %.2f%%\n", read_percentage_of_move_y());
+
+        printf("\nvalor do eixo x: %d\n", read_value_x());
+        printf("valor do eixo y: %d\n", read_value_y());
+        printf("-------------------------\n");
         
+
+        
+
         sleep_ms(500); // Atualiza a cada 500ms
     }
     return 0;

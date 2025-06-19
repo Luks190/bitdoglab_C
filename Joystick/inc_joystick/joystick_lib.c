@@ -89,3 +89,45 @@ int read_movement_of_joystick_x(){
         return 0; // Nenhum movimento detectado
     }
 }
+
+float read_percentage_of_move_x(){
+    uint16_t vrx_value; // Variável para armazenar a leitura do ADC
+
+    adc_select_input(1); // Seleciona o canal 1 do ADC (eixo X do joystick)
+    sleep_us(2); // Pequeno delay para garantir estabilidade na leitura
+    vrx_value = adc_read(); // Lê o valor do eixo X do joystick
+
+    // Calcula a porcentagem de movimento no eixo X
+    return (vrx_value-2047)/2047.0 * 100;
+}
+
+float read_percentage_of_move_y(){
+    uint16_t vry_value; // Variável para armazenar a leitura do ADC
+
+    adc_select_input(0); // Seleciona o canal 0 do ADC (eixo Y do joystick)
+    sleep_us(2); // Pequeno delay para garantir estabilidade na leitura
+    vry_value = adc_read(); // Lê o valor do eixo Y do joystick
+
+    // Calcula a porcentagem de movimento no eixo Y
+    return (vry_value-2047)/2047.0 * 100;
+}
+
+int read_value_x(){
+    uint16_t vrx_value; // Variável para armazenar a leitura do ADC
+
+    adc_select_input(1); // Seleciona o canal 1 do ADC (eixo X do joystick)
+    sleep_us(2); // Pequeno delay para garantir estabilidade na leitura
+    vrx_value = adc_read(); // Lê o valor do eixo X do joystick
+
+    return vrx_value; // Retorna o valor lido do eixo X
+}
+
+int read_value_y(){
+    uint16_t vry_value; // Variável para armazenar a leitura do ADC
+
+    adc_select_input(0); // Seleciona o canal 0 do ADC (eixo Y do joystick)
+    sleep_us(2); // Pequeno delay para garantir estabilidade na leitura
+    vry_value = adc_read(); // Lê o valor do eixo Y do joystick
+
+    return vry_value; // Retorna o valor lido do eixo Y
+}
