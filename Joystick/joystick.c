@@ -7,21 +7,17 @@ int main() {
     joystick_init(); // Inicializa o joystick
     
     while (1) {
-        // Lê valores do joystick
-        int x_pos = value_of_the_pos_of_joystick_x();
-        int y_pos = value_of_the_pos_of_joystick_y();
-        int x_mov = read_movement_of_joystick_x();
-        int y_mov = read_movement_of_joystick_y();
-        
+        bool btn_v = false, btn_v2 = false;
+
         // Exibe os resultados formatados
         printf("\n--- Estado do Joystick ---\n");
         printf("Eixo X: %s | Movimento: %s\n", 
-               (x_pos == 1) ? "Esquerda" : (x_pos == -1) ? "Direita" : "Neutro",
-               x_mov ? "Detectado" : "Ausente");
+               (value_of_the_pos_of_joystick_x() == 1) ? "Esquerda" : (value_of_the_pos_of_joystick_x() == -1) ? "Direita" : "Neutro",
+               read_movement_of_joystick_x() ? "Detectado" : "Ausente");
         
         printf("Eixo Y: %s | Movimento: %s\n", 
-               (y_pos == 1) ? "Cima" : (y_pos == -1) ? "Baixo" : "Neutro",
-               y_mov ? "Detectado" : "Ausente");
+               (value_of_the_pos_of_joystick_y() == 1) ? "Baixo" : (value_of_the_pos_of_joystick_y() == -1) ? "Cima" : "Neutro",
+               read_movement_of_joystick_y() ? "Detectado" : "Ausente");
 
         printf("-------------------------\n");
         printf("porcentagem do eixo X: %.2f%%\n", read_percentage_of_move_x());
@@ -30,9 +26,6 @@ int main() {
         printf("\nvalor do eixo x: %d\n", read_value_x());
         printf("valor do eixo y: %d\n", read_value_y());
         printf("-------------------------\n");
-        
-
-        
 
         sleep_ms(500); // Atualiza a cada 500ms
     }

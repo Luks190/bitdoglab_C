@@ -28,5 +28,4 @@ int read_value_x();
 // Função que lê o valor do eixo Y do joystick
 int read_value_y();
 
-
 #endif
