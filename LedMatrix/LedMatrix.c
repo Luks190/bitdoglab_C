@@ -97,6 +97,6 @@ int main() {
 
     // Loop infinito
     while (1) {
-        tight_loop_contents();
+        break;
     }
 }
