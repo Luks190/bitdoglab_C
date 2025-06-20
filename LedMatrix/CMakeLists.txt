@@ -40,6 +40,9 @@ add_executable(LedMatrix LedMatrix.c inc_ledMatrix/ledMatrix_lib.c)
 pico_set_program_name(LedMatrix "LedMatrix")
 pico_set_program_version(LedMatrix "0.1")
 
+# Generate PIO header
+pico_generate_pio_header(LedMatrix ${CMAKE_CURRENT_LIST_DIR}/ws2818b.pio)
+
 # Modify the below lines to enable/disable output over UART/USB
 pico_enable_stdio_uart(LedMatrix 0)
 pico_enable_stdio_usb(LedMatrix 1)
@@ -47,6 +50,8 @@ pico_enable_stdio_usb(LedMatrix 1)
 # Add the standard library to the build
 target_link_libraries(LedMatrix
         pico_stdlib
+        hardware_pio
+        hardware_clocks
         )
 
 # Add the standard include files to the build

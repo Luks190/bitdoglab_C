@@ -1,13 +1,11 @@
-
+#include "hardware/pio.h"
+#include "hardware/clocks.h"
 #include "ledMatrix_lib.h"
 #include "ws2818b.pio.h"
-#include "pico/stdlib.h"
 
 
 #define LED_COUNT 25
-#define LED_PIN 7
 
-void npWrite();
 
 // Definição de pixel GRB
 struct pixel_t {
@@ -53,31 +51,6 @@ void npInit(uint pin) {
 }
 
 /**
- * Atribui uma cor RGB a um LED.
- */
-void npSetLED(const uint index, const uint8_t r, const uint8_t g, const uint8_t b) {
-  leds[index].R = r;
-  leds[index].G = g;
-  leds[index].B = b;
-}
-
-void setLedInPosition(int X, int Y, const uint8_t r, const uint8_t g, const uint8_t b) {
-    if(Y % 2 == 0){
-        npSetLED((4 - X)+(Y * 5), r, g, b);
-    }else{
-        npSetLED((X)+(Y * 5), r, g, b);
-    }
-}
-
-/**
- * Limpa o buffer de pixels.
- */
-void npClear() {
-  for (uint i = 0; i < LED_COUNT; ++i)
-    npSetLED(i, 0, 0, 0);
-}
-
-/**
  * Escreve os dados do buffer nos LEDs.
  */
 void npWrite() {
@@ -89,4 +62,64 @@ void npWrite() {
   }
   sleep_us(100); // Espera 100us, sinal de RESET do datasheet.
 }
+
+/**
+ * Reverte a ordem de um byte LSB -> MSB e sucessivamente.
+ * @param b o byte a ser revertido
+ */
+uint8_t reverse_byte(uint8_t b) {
+  uint8_t reversed = 0; // Inicializa o byte a ser revertido
+
+  // Faz a reversão bit a bit seguindo a lógica: 
+  // 1. Captura o i-ésimo bit do byte original ((b >> i) & 0x1)
+  // 2. Envia-o para a variável reversed com o operador |
+  // 3. Arrasta o bit transferido para a esquerda (reversed << 1)
+  for (uint8_t i = 0; i < 8; i++) {
+    reversed = reversed << 1; // 
+    reversed = (reversed | ((b >> i) & 0x1)); 
+  }
+
+  return reversed;
+}
+
+
+/**
+ * Atribui uma cor RGB a um LED.
+ */
+void npSetLED(const uint index, const uint8_t r, const uint8_t g, const uint8_t b) {
+  uint8_t reversed_r = reverse_byte(r);
+  uint8_t reversed_g = reverse_byte(g);
+  uint8_t reversed_b = reverse_byte(b);
+
+  leds[index].R = reversed_r;
+  leds[index].G = reversed_g;
+  leds[index].B = reversed_b;
+}
+
+void setLedInPosition(int X, int Y, const uint8_t r, const uint8_t g, const uint8_t b) {
+    if(Y % 2 == 0){
+        npSetLED((4 - X)+(Y * 5), r, g, b);
+    }else{
+        npSetLED((X)+(Y * 5), r, g, b);
+    }
+}
+
+void setLedInPositionWithHexa(int X, int Y, const uint32_t color) {
+    // Extrai os componentes de cor do valor hexadecimal
+    uint8_t r = (color >> 16) & 0xFF; // Extrai o componente vermelho
+    uint8_t g = (color >> 8) & 0xFF;  // Extrai o componente verde
+    uint8_t b = color & 0xFF;         // Extrai o componente azul
+
+    setLedInPosition(X, Y, r, g, b);
+}
+
+/**
+ * Limpa o buffer de pixels.
+ */
+void npClear() {
+  for (uint i = 0; i < LED_COUNT; ++i)
+    npSetLED(i, 0, 0, 0);
+}
+
+
 
