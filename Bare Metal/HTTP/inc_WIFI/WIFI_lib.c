@@ -33,16 +33,16 @@ void wifi_init(char *WIFI_SSID, char *WIFI_PASS) {
 
 
 static err_t http_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err) {
-    if (p == NULL) {                      // Se o pacote de dados recebido for NULL, significa que a conexão foi fechada
-        tcp_close(tpcb);                  // Fecha a conexão TCP
-        return ERR_OK;                    // Retorna com sucesso
+    if (p == NULL) {                      
+        tcp_close(tpcb);                  
+        return ERR_OK;                    
     }
 
-    char *payload = (char *)p->payload;   // Converte o buffer do pacote para uma string
+    char *payload = (char *)p->payload;   
     extract_json(payload);
 
-    pbuf_free(p);                         // Libera o buffer do pacote
-    return ERR_OK;                        // Retorna com sucesso
+    pbuf_free(p);                         
+    return ERR_OK;                        
 }
 
 
@@ -64,41 +64,41 @@ static err_t http_connected_callback(void *arg, struct tcp_pcb *tpcb, err_t err)
     
     // Envia a requisição HTTP para o servidor
     tcp_write(tpcb, request, strlen(request), TCP_WRITE_FLAG_COPY);
-    tcp_output(tpcb);                     // Envia os dados pela rede
-    tcp_recv(tpcb, http_recv_callback);   // Registra o callback para tratar a resposta
+    tcp_output(tpcb);                     
+    tcp_recv(tpcb, http_recv_callback);   
 
-    return ERR_OK;                        // Retorna com sucesso
+    return ERR_OK;                        
 }
 
 void DNS_found_callback(const char *name, const ip_addr_t *ipaddr, void *callback_arg) {
-    if (ipaddr) {                          // Se o endereço IP foi resolvido com sucesso
-        printf("Endereço IP: %s\n", ipaddr_ntoa(ipaddr)); // Exibe o endereço IP resolvido
-        tcp_client_pcb = tcp_new();        // Cria uma nova estrutura de controle de conexão TCP
-        tcp_connect(tcp_client_pcb, ipaddr, PORT, http_connected_callback);  // Conecta ao servidor
+    if (ipaddr) {                          
+        printf("Endereço IP: %s\n", ipaddr_ntoa(ipaddr)); 
+        tcp_client_pcb = tcp_new();        
+        tcp_connect(tcp_client_pcb, ipaddr, PORT, http_connected_callback);  
     } else {
-        printf("Falha na resolução de DNS\n"); // Caso a resolução de DNS falhe
+        printf("Falha na resolução de DNS\n"); 
     }
 }
 
 void parse_json(const char *json_str) {
-    // Converte a string JSON recebida em um objeto cJSON
+    
     cJSON *json = cJSON_Parse(json_str); 
-    if (json == NULL) {  // Se houver erro ao analisar o JSON, exibe uma mensagem e retorna
+    if (json == NULL) {  
         printf("Erro ao analisar JSON!\n");
         return;
     }
 
     printf("\nsucess");
 
-    cJSON_Delete(json); // Libera a memória alocada para o JSON
+    cJSON_Delete(json); 
 }
 
-// Função para extrair o JSON de uma resposta HTTP
+
 void extract_json(char *text) {
-    char *json_start = strrchr(text, '{');  // encontra a última ocorrência de '{'
+    char *json_start = strrchr(text, '{');  
     if (json_start) {
         printf("%s", json_start);
-        parse_json(json_start);  // função que você já deve ter para analisar o JSON
+        parse_json(json_start);  
     } else {
         printf("JSON não encontrado\n");
     }

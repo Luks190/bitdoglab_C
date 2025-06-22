@@ -2,8 +2,8 @@
 #include "pico/stdlib.h"
 #include "inc_WIFI/WIFI_lib.h"
 
-#define WIFI_SSID "brisa-4009564"               
-#define WIFI_PASS "fugd9i9k"
+#define WIFI_SSID "SSID"               
+#define WIFI_PASS "PASS"
               
 #define HOST "jsonplaceholder.typicode.com"
 
