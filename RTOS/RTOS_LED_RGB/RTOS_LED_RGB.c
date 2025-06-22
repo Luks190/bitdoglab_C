@@ -5,57 +5,43 @@
 #include "task.h"
 #include "hardware/pwm.h"
 
-void fadeLED(){
-    bool m_R = 1, m_G = 1, m_B = 1;
+void fadeLED_task(void *params) {
+    bool m_R = true, m_G = true, m_B = true;
     int cont_R = 0, cont_G = 0, cont_B = 0;
 
-    while(true){
-        if(cont_R > 255 || cont_R < 0){
-            m_R = !m_R;
-        }
+    while (1) {
+        // Verificação de limites e inversão das direções
+        if (cont_R >= 255) m_R = false;
+        else if (cont_R <= 0) m_R = true;
 
-        if(cont_G > 255 || cont_G < 0){
-            m_G = !m_G;
-        }
+        if (cont_G >= 255) m_G = false;
+        else if (cont_G <= 0) m_G = true;
 
-        if(cont_B > 255 || cont_B < 0){
-            m_G = !m_G;
-        }
+        if (cont_B >= 255) m_B = false;
+        else if (cont_B <= 0) m_B = true;
 
-        if(m_R){
-            set_led_pwm_color(cont_R++, cont_G, cont_B);
-        }else{
-            set_led_pwm_color(cont_R--, cont_G, cont_B);
-        }
+        // Atualiza os valores RGB conforme a direção
+        cont_R += (m_R ? 1 : -1);
+        cont_G += (m_G ? 2 : -2);
+        cont_B += (m_B ? 4 : -4);
 
-        if(m_G){
-            cont_G = cont_G + 10;
-            set_led_pwm_color(cont_R, cont_G, cont_B);
-        }else{
-            cont_G = cont_G - 10;
-            set_led_pwm_color(cont_R, cont_G, cont_B);
-        }
+        // Define a nova cor no LED RGB
+        set_led_pwm_color(cont_R, cont_G, cont_B);
 
-        if(m_B){
-            cont_B = cont_B + 30;
-            set_led_pwm_color(cont_R, cont_G, cont_B);
-        }else{
-            cont_B = cont_B - 30;
-            set_led_pwm_color(cont_R, cont_G, cont_B);
-        }
-
-        vTaskDelay(100);
+        // Delay da tarefa
+        vTaskDelay(20);
     }
 }
 
-
-int main()
-{
+int main() {
     stdio_init_all();
-    led_rgb_pwm_init();
+    led_rgb_pwm_init();  // Inicializa a sua biblioteca LED
 
-    xTaskCreate(fadeLED, "fade LEDs", 128, NULL, 1, NULL);
+    // Criação da tarefa que faz o LED piscar com fade
+    xTaskCreate(fadeLED_task, "FadeRGB", 256, NULL, 1, NULL);
 
+    // Inicia o agendador do FreeRTOS
     vTaskStartScheduler();
-    
+
+    while (true);  // Nunca deve chegar aqui
 }
