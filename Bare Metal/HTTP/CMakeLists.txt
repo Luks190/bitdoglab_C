@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(Comunicacao_http Comunicacao_http.c )
+add_executable(Comunicacao_http Comunicacao_http.c inc_WIFI/WIFI_lib.c cJSON/cJSON.c)
 
 pico_set_program_name(Comunicacao_http "Comunicacao_http")
 pico_set_program_version(Comunicacao_http "0.1")
@@ -46,17 +46,15 @@ pico_enable_stdio_usb(Comunicacao_http 1)
 
 # Add the standard library to the build
 target_link_libraries(Comunicacao_http
-        pico_stdlib)
+        pico_stdlib
+        pico_lwip_http
+        pico_cyw43_arch_lwip_threadsafe_background  
+        )
 
 # Add the standard include files to the build
 target_include_directories(Comunicacao_http PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
-
-# Add any user requested libraries
-target_link_libraries(Comunicacao_http 
-        
-        )
 
 pico_add_extra_outputs(Comunicacao_http)
 
