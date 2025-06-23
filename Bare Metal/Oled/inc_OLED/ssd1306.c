@@ -318,3 +318,50 @@ void ssd1306_init_display(ssd1306_t *disp) {
     ssd1306_clear(disp);  // Limpa o display
     ssd1306_show(disp);  // Atualiza o display
 }
+
+void ssd1306_draw_string_with_break_line(ssd1306_t *p, uint32_t x, uint32_t y, uint32_t scale, const char *s){
+    
+    int pulo = 120/((font_8x5[1]+font_8x5[2])*scale);
+    int aux = pulo;
+    for(int32_t x_n=x; *s; x_n+=(font_8x5[1]+font_8x5[2])*scale) {
+       if(aux == 0){
+            aux = pulo;
+            x_n = 0;
+            y+=8*scale;
+
+       }else{
+            aux--;
+       }   
+
+        ssd1306_draw_char_with_font(p, x_n, y, scale, font_8x5, *(s++));
+    }
+}
+
+void ssd1306_draw_string_in_center(ssd1306_t *p, uint32_t scale, const char *s){
+    
+    int qnt_max = 20/scale;
+
+    int cont = 0;
+
+    for(int32_t i = 0; *s; i+=(font_8x5[1]+font_8x5[2])*scale) {
+        cont++;
+        *(s++);
+    }
+
+    for(int32_t j = cont; j != 0; j--){
+        *(s--);
+
+    }
+
+    int y = 0;
+    for(int i = 0; *s; i++){
+        if(i != 0 && i%(20/scale) == 0){
+            y += 8*scale;
+            i = 0;
+        }
+
+        ssd1306_draw_char(p, (128 - i*6*scale)/2, y, scale, *(s++));
+        
+    }
+
+}

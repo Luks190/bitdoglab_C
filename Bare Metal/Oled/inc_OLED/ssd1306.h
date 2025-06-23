@@ -274,4 +274,7 @@ void ssd1306_draw_string(ssd1306_t *p, uint32_t x, uint32_t y, uint32_t scale, c
 
 void ssd1306_init_display(ssd1306_t *disp);
 
+void ssd1306_draw_string_with_break_line(ssd1306_t *p, uint32_t x, uint32_t y, uint32_t scale, const char *s);
+
+void ssd1306_draw_string_in_center(ssd1306_t *p, uint32_t scale, const char *s);
 #endif
