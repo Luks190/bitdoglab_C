@@ -337,31 +337,27 @@ void ssd1306_draw_string_with_break_line(ssd1306_t *p, uint32_t x, uint32_t y, u
     }
 }
 
-void ssd1306_draw_string_in_center(ssd1306_t *p, uint32_t scale, const char *s){
-    
-    int qnt_max = 20/scale;
+void ssd1306_draw_string_in_center(ssd1306_t *p, uint32_t scale, const char *s) {
+    int y = 0; 
 
-    int cont = 0;
-
-    for(int32_t i = 0; *s; i+=(font_8x5[1]+font_8x5[2])*scale) {
-        cont++;
-        *(s++);
-    }
-
-    for(int32_t j = cont; j != 0; j--){
-        *(s--);
-
-    }
-
-    int y = 0;
-    for(int i = 0; *s; i++){
-        if(i != 0 && i%(20/scale) == 0){
-            y += 8*scale;
-            i = 0;
+    while (*s) {
+        
+        int line_len = 0;
+        const char *line_start = s;
+        while (*s && line_len < 128 / 6 * scale) {
+            line_len++;
+            s++;
         }
 
-        ssd1306_draw_char(p, (128 - i*6*scale)/2, y, scale, *(s++));
         
-    }
+        int line_pixel_width = line_len * 6 * scale;
+        int x_start = (128 - line_pixel_width) / 2;
 
+        
+        for (int i = 0; i < line_len; i++) {
+            ssd1306_draw_char(p, x_start + i * 6 * scale, y, scale, line_start[i]);
+        }
+
+        y += 8 * scale; 
+    }
 }
