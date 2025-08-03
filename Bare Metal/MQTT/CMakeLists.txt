@@ -35,7 +35,10 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(comunicacao_mqtt comunicacao_mqtt.c )
+add_executable(comunicacao_mqtt comunicacao_mqtt.c 
+    inc_MQTT/MQTT_lib.c
+    inc_WIFI/WIFI_lib.c
+    )
 
 pico_set_program_name(comunicacao_mqtt "comunicacao_mqtt")
 pico_set_program_version(comunicacao_mqtt "0.1")
@@ -46,17 +49,15 @@ pico_enable_stdio_usb(comunicacao_mqtt 1)
 
 # Add the standard library to the build
 target_link_libraries(comunicacao_mqtt
-        pico_stdlib)
+        pico_stdlib
+        pico_cyw43_arch_lwip_threadsafe_background      
+        pico_lwip_mqtt
+        )
 
 # Add the standard include files to the build
 target_include_directories(comunicacao_mqtt PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
-
-# Add any user requested libraries
-target_link_libraries(comunicacao_mqtt 
-        
-        )
 
 pico_add_extra_outputs(comunicacao_mqtt)
 
