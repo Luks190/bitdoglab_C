@@ -9,6 +9,4 @@ bool wifi_is_connected();
 
 void wifi_restart();
 
-
-
 #endif
