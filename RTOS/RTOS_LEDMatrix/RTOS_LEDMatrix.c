@@ -9,7 +9,7 @@
 
 SemaphoreHandle_t xMutex;
 
-void fade(void *pvParameters){
+void vtaskFade(void *pvParameters){
     bool direction = true;
     while(true){
         
@@ -45,7 +45,7 @@ void fade(void *pvParameters){
     }
 }
 
-void left_to_Right(){
+void vtaskLeftToRight(){
 
     while(true){
         if(xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE){    
@@ -73,8 +73,8 @@ int main(){
     xMutex = xSemaphoreCreateMutex();
 
     if(xMutex != NULL){
-        xTaskCreate(fade, "fade Task", 256, NULL, 1, NULL);
-        xTaskCreate(left_to_Right, "move Task", 256, NULL, 1, NULL);
+        xTaskCreate(vtaskFade, "fade Task", 256, NULL, 1, NULL);
+        xTaskCreate(vtaskLeftToRight, "move Task", 256, NULL, 1, NULL);
         vTaskStartScheduler();    
     }
     

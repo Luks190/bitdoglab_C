@@ -5,7 +5,7 @@
 #include "task.h"
 #include "hardware/pwm.h"
 
-void fadeLED_task(void *params) {
+void vfadeLED_task(void *params) {
     bool m_R = true, m_G = true, m_B = true;
     int cont_R = 0, cont_G = 0, cont_B = 0;
 
@@ -38,7 +38,7 @@ int main() {
     led_rgb_pwm_init();  // Inicializa a sua biblioteca LED
 
     // Criação da tarefa que faz o LED piscar com fade
-    xTaskCreate(fadeLED_task, "FadeRGB", 256, NULL, 1, NULL);
+    xTaskCreate(vfadeLED_task, "FadeRGB", 256, NULL, 1, NULL);
 
     // Inicia o agendador do FreeRTOS
     vTaskStartScheduler();
